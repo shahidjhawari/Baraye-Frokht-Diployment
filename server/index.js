@@ -18,11 +18,6 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-// Set secure and sameSite options for cookies
-app.use((req, res, next) => {
-  res.cookie("SameSite", "None", { secure: true }); // Ensure cookies are sent only over HTTPS
-  next();
-});
 
 app.get("/", (req, res) => {
   res.send("Welcome");
