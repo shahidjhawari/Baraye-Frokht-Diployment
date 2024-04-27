@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { jwtDecode } from "jwt-decode";
+import jwtDecode from "jwt-decode"; // Fix import statement
 import UploadProduct from "../components/UploadProduct";
 import SummaryApi from "../common";
 import AdminProductCard from "../components/AdminProductCard";
@@ -13,7 +13,7 @@ const AllProducts = () => {
     const token = localStorage.getItem("token");
     console.log("Token from local storage:", token);
     if (token) {
-      const decodedToken = jwtDecode(token);
+      const decodedToken = jwtDecode(token); // Fix function call
       console.log("Decoded token:", decodedToken);
 
       const userId = decodedToken?._id;
