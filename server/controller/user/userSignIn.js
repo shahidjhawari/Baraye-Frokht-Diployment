@@ -32,7 +32,7 @@ async function userSignInController(req, res, next) {
             const tokenOption = {
                 httpOnly: true,
                 secure: true, // Only secure in production
-                sameSite: 'Lax', // Set SameSite attribute to Lax
+                sameSite: '', // Set SameSite attribute to Lax
             }
 
             res.cookie("token", token, tokenOption).status(200).json({
