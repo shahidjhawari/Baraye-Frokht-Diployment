@@ -1,4 +1,4 @@
-const backendDomin = "https://baraye-frokht-server.vercel.app"
+const backendDomin = "https://baraye-frokht-diployment-server.vercel.app"
 
 const SummaryApi = {
     signUP : {
