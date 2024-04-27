@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import jwt_decode from "jwt-decode"; // Correct import statement
+import { jwtDecode } from "jwt-decode";
 import UploadProduct from "../components/UploadProduct";
 import SummaryApi from "../common";
 import AdminProductCard from "../components/AdminProductCard";
@@ -12,9 +12,8 @@ const AllProducts = () => {
   const fetchAllProduct = async () => {
     const token = localStorage.getItem("token");
     console.log("Token from local storage:", token);
-
     if (token) {
-      const decodedToken = jwt_decode(token); // Correct function name
+      const decodedToken = jwtDecode(token);
       console.log("Decoded token:", decodedToken);
 
       const userId = decodedToken?._id;
@@ -24,8 +23,6 @@ const AllProducts = () => {
       } else {
         console.log("User ID not found in token");
       }
-    } else {
-      console.log("Token not found in local storage");
     }
 
     const response = await fetch(SummaryApi.allProduct.url);
