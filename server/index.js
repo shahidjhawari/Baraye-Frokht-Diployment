@@ -8,7 +8,7 @@ const router = require("./routes");
 const app = express();
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
+    origin: "https://barayefrokht.vercel.app",
     credentials: true,
   })
 );
