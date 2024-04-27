@@ -28,7 +28,7 @@ async function userSignInController(req,res){
             _id : user._id,
             email : user.email,
         }
-        const token = await jwt.sign(tokenData, "GDFDSHJCXKGHFDJGHDFJRWEWERWE", { expiresIn: 60 * 60 * 24 * 30 }); // 30 days in seconds
+        const token = await jwt.sign(tokenData, process.env.TOKEN_SECRET_KEY, { expiresIn: 60 * 60 * 24 * 30 }); // 30 days in seconds
 
         const tokenOption = {
             httpOnly : true,
