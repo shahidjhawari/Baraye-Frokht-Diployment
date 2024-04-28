@@ -18,7 +18,7 @@ const AllProducts = () => {
         const decodedToken = jwtDecode(storedToken);
         console.log("Decoded token:", decodedToken);
 
-        const userId = decodedToken._id;
+        const userId = decodedToken?.id; // Ensure you're accessing the correct property from the decoded token
         if (userId) {
           setLoggedInUserId(userId);
           console.log("Logged-in user ID:", userId);

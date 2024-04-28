@@ -48,7 +48,8 @@ const Login = () => {
     const dataApi = await dataResponse.json();
 
     if (dataApi.success) {
-      localStorage.setItem("token", dataApi.data); 
+      const token = dataApi.data; // Get the token string from the response
+      localStorage.setItem("token", token); // Store the token string in localStorage
 
       toast(dataApi.message);
       navigate("/");
