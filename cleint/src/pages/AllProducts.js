@@ -13,10 +13,9 @@ const AllProducts = () => {
     try {
       const storedToken = localStorage.getItem("token");
       console.log("Token from local storage:", storedToken);
-      
+
       if (storedToken) {
-        const token = JSON.parse(storedToken); // Parse the stored token
-        const decodedToken = jwtDecode(token);
+        const decodedToken = jwtDecode(storedToken);
         console.log("Decoded token:", decodedToken);
 
         const userId = decodedToken._id;
