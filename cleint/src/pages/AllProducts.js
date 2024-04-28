@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { jwtDecode } from "jwt-decode";
+import jwtDecode from "jwt-decode";
 import UploadProduct from "../components/UploadProduct";
 import SummaryApi from "../common";
 import AdminProductCard from "../components/AdminProductCard";
@@ -13,25 +13,29 @@ const AllProducts = () => {
     try {
       const token = localStorage.getItem("token");
       console.log("Token from local storage:", token);
-      if (token) {
-        const decodedToken = jwtDecode(token);
-        console.log("Decoded token:", decodedToken);
-
-        const userId = decodedToken?._id;
-        if (userId) {
-          setLoggedInUserId(userId);
-          console.log("Logged-in user ID:", userId);
-        } else {
-          console.log("User ID not found in token");
-        }
-      } else {
+      
+      if (!token) {
         console.log("Token not found in local storage");
+        return;
       }
+
+      const decodedToken = jwtDecode(token);
+      console.log("Decoded token:", decodedToken);
+
+      if (!decodedToken || !decodedToken._id) {
+        console.log("Invalid token format or missing user ID");
+        return;
+      }
+
+      const userId = decodedToken._id;
+      setLoggedInUserId(userId);
+      console.log("Logged-in user ID:", userId);
 
       const response = await fetch(SummaryApi.allProduct.url);
       const dataResponse = await response.json();
-      console.log("product data", dataResponse);
-      setUserProducts(dataResponse?.data || []);
+      console.log("Product data:", dataResponse);
+
+      setUserProducts(dataResponse.data || []);
     } catch (error) {
       console.error("Error fetching products:", error);
     }
