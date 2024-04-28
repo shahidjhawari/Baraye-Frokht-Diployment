@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import jwtDecode from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
 import UploadProduct from "../components/UploadProduct";
 import SummaryApi from "../common";
 import AdminProductCard from "../components/AdminProductCard";
