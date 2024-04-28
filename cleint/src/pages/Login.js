@@ -25,12 +25,10 @@ const Login = () => {
   const handleOnChange = (e) => {
     const { name, value } = e.target;
 
-    setData((preve) => {
-      return {
-        ...preve,
-        [name]: value,
-      };
-    });
+    setData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -40,25 +38,23 @@ const Login = () => {
       method: SummaryApi.signIn.method,
       credentials: "include",
       headers: {
-        "content-type": "application/json",
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     });
 
-    const dataApi = await dataResponse.json();
+    const responseData = await dataResponse.json();
 
-    if (dataApi.success) {
-      const token = dataApi.data; // Get the token string from the response
-      localStorage.setItem("token", token); // Store the token string in localStorage
-
-      toast(dataApi.message);
+    if (responseData.success) {
+      const { token } = responseData;
+      localStorage.setItem("token", token);
+      
+      toast(responseData.message);
       navigate("/");
       fetchUserDetails();
       fetchUserAddToCart();
-    }
-
-    if (dataApi.error) {
-      toast.error(dataApi.message);
+    } else {
+      toast.error(responseData.message);
     }
   };
 
@@ -121,10 +117,10 @@ const Login = () => {
           </form>
 
           <p className="my-5">
-            Don't have account ?{" "}
+            Don't have an account?{" "}
             <Link
               to={"/sign-up"}
-              className=" text-fuchsia-600 hover:text-amber-500 hover:underline"
+              className="text-fuchsia-600 hover:text-amber-500 hover:underline"
             >
               Sign up
             </Link>
