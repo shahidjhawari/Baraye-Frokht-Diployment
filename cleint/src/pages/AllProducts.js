@@ -18,12 +18,16 @@ const AllProducts = () => {
         const decodedToken = jwtDecode(storedToken);
         console.log("Decoded token:", decodedToken);
 
-        const userId = decodedToken?.id; // Ensure you're accessing the correct property from the decoded token
+        const userId = decodedToken?.id;
         if (userId) {
           setLoggedInUserId(userId);
           console.log("Logged-in user ID:", userId);
 
-          const response = await fetch(SummaryApi.allProduct.url);
+          const response = await fetch(SummaryApi.allProduct.url, {
+            headers: {
+              Authorization: `Bearer ${storedToken}`,
+            },
+          });
           const dataResponse = await response.json();
           console.log("product data", dataResponse);
           setUserProducts(dataResponse.data || []);
