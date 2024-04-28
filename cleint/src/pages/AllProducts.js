@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import UploadProduct from "../components/UploadProduct";
 import SummaryApi from "../common";
 import AdminProductCard from "../components/AdminProductCard";
@@ -10,36 +10,25 @@ const AllProducts = () => {
   const [loggedInUserId, setLoggedInUserId] = useState(null);
 
   const fetchAllProduct = async () => {
-    try {
-      const storedToken = localStorage.getItem("token");
-      console.log("Token from local storage:", storedToken);
+    const token = localStorage.getItem("token");
+    console.log("Token from local storage:", token);
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      console.log("Decoded token:", decodedToken);
 
-      if (storedToken) {
-        const decodedToken = jwtDecode(storedToken);
-        console.log("Decoded token:", decodedToken);
-
-        const userId = decodedToken?.id;
-        if (userId) {
-          setLoggedInUserId(userId);
-          console.log("Logged-in user ID:", userId);
-
-          const response = await fetch(SummaryApi.allProduct.url, {
-            headers: {
-              Authorization: `Bearer ${storedToken}`,
-            },
-          });
-          const dataResponse = await response.json();
-          console.log("product data", dataResponse);
-          setUserProducts(dataResponse.data || []);
-        } else {
-          console.log("User ID not found in token");
-        }
+      const userId = decodedToken?._id;
+      if (userId) {
+        setLoggedInUserId(userId);
+        console.log("Logged-in user ID:", userId);
       } else {
-        console.log("Token not found in local storage");
+        console.log("User ID not found in token");
       }
-    } catch (error) {
-      console.error("Error fetching products:", error);
     }
+
+    const response = await fetch(SummaryApi.allProduct.url);
+    const dataResponse = await response.json();
+    console.log("product data", dataResponse);
+    setUserProducts(dataResponse?.data || []);
   };
 
   useEffect(() => {

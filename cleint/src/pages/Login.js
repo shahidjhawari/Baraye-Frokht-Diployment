@@ -1,5 +1,7 @@
 import React, { useContext, useState } from "react";
 import loginIcons from "../assest/signin.gif";
+import { FaEye } from "react-icons/fa";
+import { FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import SummaryApi from "../common";
 import { toast } from "react-toastify";
@@ -25,10 +27,12 @@ const Login = () => {
   const handleOnChange = (e) => {
     const { name, value } = e.target;
 
-    setData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    setData((preve) => {
+      return {
+        ...preve,
+        [name]: value,
+      };
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -38,23 +42,24 @@ const Login = () => {
       method: SummaryApi.signIn.method,
       credentials: "include",
       headers: {
-        "Content-Type": "application/json",
+        "content-type": "application/json",
       },
       body: JSON.stringify(data),
     });
 
-    const responseData = await dataResponse.json();
+    const dataApi = await dataResponse.json();
 
-    if (responseData.success) {
-      const { token } = responseData;
-      localStorage.setItem("token", token);
-      
-      toast(responseData.message);
+    if (dataApi.success) {
+      localStorage.setItem("token", dataApi.data); 
+
+      toast(dataApi.message);
       navigate("/");
       fetchUserDetails();
       fetchUserAddToCart();
-    } else {
-      toast.error(responseData.message);
+    }
+
+    if (dataApi.error) {
+      toast.error(dataApi.message);
     }
   };
 
@@ -117,10 +122,10 @@ const Login = () => {
           </form>
 
           <p className="my-5">
-            Don't have an account?{" "}
+            Don't have account ?{" "}
             <Link
               to={"/sign-up"}
-              className="text-fuchsia-600 hover:text-amber-500 hover:underline"
+              className=" text-fuchsia-600 hover:text-amber-500 hover:underline"
             >
               Sign up
             </Link>
