@@ -1,5 +1,6 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import loginIcons from "../assest/signin.gif";
 import SummaryApi from "../common";
 import { FaStar } from "react-icons/fa";
 import { FaStarHalf } from "react-icons/fa";
@@ -20,7 +21,7 @@ const ProductDetails = () => {
     description: "",
     price: "",
     sellingPrice: "",
-    contactNumber: "", // Add contact number to your state
+    contactNumber: "",
   });
   const params = useParams();
   const [loading, setLoading] = useState(true);
@@ -56,8 +57,6 @@ const ProductDetails = () => {
     setActiveImage(dataReponse?.data?.productImage[0]);
   };
 
-  console.log("data", data);
-
   useEffect(() => {
     fetchProductDetails();
   }, [params]);
@@ -70,7 +69,6 @@ const ProductDetails = () => {
     (e) => {
       setZoomImage(true);
       const { left, top, width, height } = e.target.getBoundingClientRect();
-      console.log("coordinate", left, top, width, height);
 
       const x = (e.clientX - left) / width;
       const y = (e.clientY - top) / height;
@@ -209,6 +207,10 @@ const ProductDetails = () => {
 
             <div>
               <p className="text-slate-600 font-medium my-1">Contact : </p>
+              <div className="w-10 h-10  overflow-hidden rounded-full">
+                <img src={data.profilePic || loginIcons} alt="login icons" />
+              </div>
+              <p>Name : {data?.userName}</p>
               <p>Phone Number : 0{data.sellingPrice}</p>
               <button
                 onClick={handleWhatsAppMessage}

@@ -11,23 +11,19 @@ const AllProducts = () => {
 
   const fetchAllProduct = async () => {
     const token = localStorage.getItem("token");
-    console.log("Token from local storage:", token);
     if (token) {
       const decodedToken = jwtDecode(token);
-      console.log("Decoded token:", decodedToken);
 
       const userId = decodedToken?._id;
       if (userId) {
         setLoggedInUserId(userId);
-        console.log("Logged-in user ID:", userId);
       } else {
-        console.log("User ID not found in token");
+        console.error("User ID not found in token");
       }
     }
 
     const response = await fetch(SummaryApi.allProduct.url);
     const dataResponse = await response.json();
-    console.log("product data", dataResponse);
     setUserProducts(dataResponse?.data || []);
   };
 
@@ -36,7 +32,6 @@ const AllProducts = () => {
   }, []);
 
   useEffect(() => {
-    console.log("Initial user products:", userProducts);
   }, [userProducts]);
 
   return (

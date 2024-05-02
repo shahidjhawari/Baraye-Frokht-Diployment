@@ -1,7 +1,5 @@
 import React, { useContext, useState } from "react";
 import loginIcons from "../assest/signin.gif";
-import { FaEye } from "react-icons/fa";
-import { FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import SummaryApi from "../common";
 import { toast } from "react-toastify";
@@ -52,7 +50,7 @@ const Login = () => {
     if (dataApi.success) {
       localStorage.setItem("token", dataApi.data); 
 
-      toast(dataApi.message);
+      toast(dataApi.message, {autoClose: 1500,});
       navigate("/");
       fetchUserDetails();
       fetchUserAddToCart();

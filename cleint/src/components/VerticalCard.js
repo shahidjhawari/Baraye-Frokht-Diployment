@@ -15,6 +15,11 @@ const VerticalCard = ({ loading, data = [] }) => {
     fetchUserAddToCart();
   };
 
+  // Sort data by createdAt before rendering
+  const sortedData = [...data].sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  );
+
   return (
     <div className="grid grid-cols-[repeat(auto-fit,minmax(260px,300px))] justify-center md:justify-between md:gap-4 overflow-x-scroll scrollbar-none transition-all">
       {loading
@@ -37,7 +42,7 @@ const VerticalCard = ({ loading, data = [] }) => {
               </div>
             );
           })
-        : data.map((product, index) => {
+        : sortedData.map((product, index) => {
             return (
               <Link
                 key={product._id}

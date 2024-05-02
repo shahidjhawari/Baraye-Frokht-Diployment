@@ -4,13 +4,13 @@ import { Link, useNavigate } from "react-router-dom";
 import SummaryApi from "../common";
 import { toast } from "react-toastify";
 import { TextField } from "@mui/material";
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import Input from '@mui/material/Input';
-import InputAdornment from '@mui/material/InputAdornment';
-import IconButton from '@mui/material/IconButton';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import Input from "@mui/material/Input";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -107,7 +107,7 @@ const SignUp = () => {
       const dataApi = await dataResponse.json();
 
       if (dataApi.success) {
-        toast(dataApi.message);
+        toast(dataApi.message, {autoClose: 1500,});
         navigate("/login");
       }
 
@@ -133,7 +133,7 @@ const SignUp = () => {
                   Upload Photo
                 </div>
                 <input
-                  className='hidden'
+                  className="hidden"
                   type="file"
                   accept="image/*"
                   onChange={handleUploadPic}
@@ -153,6 +153,7 @@ const SignUp = () => {
                 id="standard-basic"
                 label="Name"
                 variant="standard"
+                inputProps={{ maxLength: 20 }}
               />
             </div>
             <div className="grid">
@@ -169,11 +170,13 @@ const SignUp = () => {
             </div>
 
             <div>
-              <FormControl sx={{ m: 0, width: '100%' }} variant="standard">
-                <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
+              <FormControl sx={{ m: 0, width: "100%" }} variant="standard">
+                <InputLabel htmlFor="standard-adornment-password">
+                  Password
+                </InputLabel>
                 <Input
                   id="standard-adornment-password"
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   value={data.password}
                   name="password"
                   onChange={handleOnChange}
@@ -194,11 +197,13 @@ const SignUp = () => {
             </div>
 
             <div>
-              <FormControl sx={{ m: 0, width: '100%' }} variant="standard">
-                <InputLabel htmlFor="standard-adornment-confirm-password">Confirm Password</InputLabel>
+              <FormControl sx={{ m: 0, width: "100%" }} variant="standard">
+                <InputLabel htmlFor="standard-adornment-confirm-password">
+                  Confirm Password
+                </InputLabel>
                 <Input
                   id="standard-adornment-confirm-password"
-                  type={showConfirmPassword ? 'text' : 'password'}
+                  type={showConfirmPassword ? "text" : "password"}
                   value={data.confirmPassword}
                   name="confirmPassword"
                   onChange={handleOnChange}
@@ -207,10 +212,16 @@ const SignUp = () => {
                     <InputAdornment position="end">
                       <IconButton
                         aria-label="toggle confirm password visibility"
-                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        onClick={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
                         onMouseDown={(e) => e.preventDefault()}
                       >
-                        {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                        {showConfirmPassword ? (
+                          <VisibilityOff />
+                        ) : (
+                          <Visibility />
+                        )}
                       </IconButton>
                     </InputAdornment>
                   }

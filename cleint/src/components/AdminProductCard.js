@@ -22,7 +22,7 @@ const AdminProductCard = ({ data, fetchdata }) => {
       const responseData = await response.json();
 
       if (responseData.success) {
-        toast.success(responseData?.message);
+        toast.success(responseData?.message, {autoClose: 1500,});
         fetchdata();
       } else {
         toast.error(responseData?.message);

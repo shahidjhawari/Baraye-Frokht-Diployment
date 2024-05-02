@@ -91,7 +91,7 @@ const AdminEditProduct = ({ onClose, productData, fetchdata }) => {
     const responseData = await response.json();
 
     if (responseData.success) {
-      toast.success(responseData?.message);
+      toast.success(responseData?.message, {autoClose: 1500,});
       onClose();
       fetchdata();
     }
@@ -105,7 +105,7 @@ const AdminEditProduct = ({ onClose, productData, fetchdata }) => {
     <div className="fixed w-full h-full bg-slate-200 bg-opacity-35 top-0 left-0 right-0 bottom-0 flex justify-center items-center">
       <div className="bg-white p-4 rounded w-full max-w-2xl h-full max-h-[80%] overflow-hidden">
         <div className="flex justify-between items-center pb-3">
-          <h2 className="font-bold text-lg">Upload Product</h2>
+          <h2 className="font-bold text-lg">Update Product</h2>
           <div
             className="w-fit ml-auto text-2xl hover:text-red-600 cursor-pointer"
             onClick={onClose}
@@ -259,7 +259,7 @@ const AdminEditProduct = ({ onClose, productData, fetchdata }) => {
           ></textarea>
 
           <button className="px-3 py-2 bg-fuchsia-600 text-white mb-10 hover:bg-amber-500">
-            Upload Product
+            Update Product
           </button>
           <button
             className="px-3 py-2 bg-red-600 text-white hover:bg-red-500"

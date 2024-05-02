@@ -28,7 +28,6 @@ const VerticalCardProduct = ({ category, heading }) => {
     const categoryProduct = await fetchCategoryWiseProduct(category);
     setLoading(false);
 
-    console.log("horizontal data", categoryProduct.data);
     setData(categoryProduct?.data);
   };
 
@@ -43,6 +42,11 @@ const VerticalCardProduct = ({ category, heading }) => {
   const scrollLeft = () => {
     scrollElement.current.scrollLeft -= 300;
   };
+
+  // Sort data by createdAt before rendering
+  const sortedData = [...data].sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  );
 
   return (
     <div className="container mx-auto px-4 my-6 relative">
@@ -85,7 +89,7 @@ const VerticalCardProduct = ({ category, heading }) => {
                 </div>
               );
             })
-          : data.map((product, index) => {
+          : sortedData.map((product, index) => {
               return (
                 <Link
                   key={product._id}
