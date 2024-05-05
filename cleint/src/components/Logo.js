@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from "../assest/assest/brlogo.webp"
+import logo from "../assest/assest/gifcompresslogo.gif"
 
 const Logo = ({ w, h }) => {
   return (
@@ -20,7 +20,7 @@ const Logo = ({ w, h }) => {
       </g>
       <image
         href={logo} // Replace "url_to_your_image_logo.png" with the URL of your image logo
-        width="350" // Adjust width and height according to your image logo dimensions
+        width="320" // Adjust width and height according to your image logo dimensions
       />
       <g
         id="SvgjsG1031"
