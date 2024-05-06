@@ -13,9 +13,4 @@ const uploadImage = async (image) => {
     return dataResponse.json();
 };
 
-// Function to convert stored HTTP image URLs to HTTPS
-const convertHttpToHttps = (imageUrl) => {
-    return imageUrl.replace("http://", "https://");
-};
-
-export { uploadImage, convertHttpToHttps };
+export default uploadImage;
