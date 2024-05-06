@@ -3,7 +3,7 @@ const uploadImage = async (image) => {
     formData.append("file", image);
     formData.append("upload_preset", "mern_product");
 
-    const url = `https://api.cloudinary.com/v1_1/dxampilpv/image/upload`;
+    const url = `http://api.cloudinary.com/v1_1/dxampilpv/image/upload`;
 
     const dataResponse = await fetch(url, {
         method: "post",
