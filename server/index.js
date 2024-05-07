@@ -9,8 +9,7 @@ const app = express();
 app.use(
   cors({
     origin: "https://barayefrokht.vercel.app",
-    methods: "GET,POST", // Add the allowed HTTP methods
-    allowedHeaders: "Content-Type,Authorization", // Add the allowed headers
+    credentials: true,
   })
 );
 app.use(express.json());
