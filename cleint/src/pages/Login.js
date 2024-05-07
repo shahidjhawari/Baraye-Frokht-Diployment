@@ -48,9 +48,14 @@ const Login = () => {
     const dataApi = await dataResponse.json();
 
     if (dataApi.success) {
-      localStorage.setItem("token", dataApi.data); 
+      // Use AsyncStorage.setItem instead of localStorage.setItem
+      try {
+        await AsyncStorage.setItem("token", dataApi.data);
+      } catch (error) {
+        console.error("Error saving data to AsyncStorage:", error);
+      }
 
-      toast(dataApi.message, {autoClose: 1500,});
+      toast(dataApi.message, { autoClose: 1500 });
       navigate("/");
       fetchUserDetails();
       fetchUserAddToCart();
@@ -101,16 +106,15 @@ const Login = () => {
                       >
                         {showPassword ? <VisibilityOff /> : <Visibility />}
                       </IconButton>
-                      
                     </InputAdornment>
                   }
                 />
                 <Link
-                to={"/forgot-password"}
-                className="block w-fit ml-auto hover:underline hover:text-amber-500"
-              >
-                Forgot password ?
-              </Link>
+                  to={"/forgot-password"}
+                  className="block w-fit ml-auto hover:underline hover:text-amber-500"
+                >
+                  Forgot password ?
+                </Link>
               </FormControl>
             </div>
 
