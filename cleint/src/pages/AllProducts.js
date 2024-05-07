@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
-import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
 import UploadProduct from "../components/UploadProduct";
 import SummaryApi from "../common";
 import AdminProductCard from "../components/AdminProductCard";
@@ -11,26 +10,21 @@ const AllProducts = () => {
   const [loggedInUserId, setLoggedInUserId] = useState(null);
 
   const fetchAllProduct = async () => {
-    try {
-      const token = await AsyncStorage.getItem("token"); // Get token from AsyncStorage
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decodedToken = jwtDecode(token);
 
-      if (token) {
-        const decodedToken = jwtDecode(token);
-
-        const userId = decodedToken?._id;
-        if (userId) {
-          setLoggedInUserId(userId);
-        } else {
-          console.error("User ID not found in token");
-        }
+      const userId = decodedToken?._id;
+      if (userId) {
+        setLoggedInUserId(userId);
+      } else {
+        console.error("User ID not found in token");
       }
-
-      const response = await fetch(SummaryApi.allProduct.url);
-      const dataResponse = await response.json();
-      setUserProducts(dataResponse?.data || []);
-    } catch (error) {
-      console.error("Error fetching product data:", error);
     }
+
+    const response = await fetch(SummaryApi.allProduct.url);
+    const dataResponse = await response.json();
+    setUserProducts(dataResponse?.data || []);
   };
 
   useEffect(() => {
