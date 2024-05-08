@@ -96,30 +96,25 @@ const ProductDetails = () => {
     navigate("/cart");
   };
 
-  const handleWhatsAppMessage = () => {
-    let message = `Aslamo Alaikum!! I am `;
-    if (user && user.name) {
-        message += `${user.name}`;
-    }
-    message += ` from Baraye Frokht App. Ap ye ${
-        data?.productName
-        } - ${displayINRCurrency(data.price).replace(
-            /\.00$/,
-            ""
-        )} me sell kar rahe han, me buy krna chahta hoon`;
+  // Your JavaScript code where you handle WhatsApp message
+const handleWhatsAppMessage = () => {
+  let message = `Aslamo Alaikum!! I am `;
+  if (user && user.name) {
+      message += `${user.name}`;
+  }
+  message += ` from Baraye Frokht App. Ap ye ${
+      data?.productName
+      } - ${displayINRCurrency(data.price).replace(
+          /\.00$/,
+          ""
+      )} me sell kar rahe han, me buy krna chahta hoon`;
 
-    const whatsappUrl = `https://wa.me/${
-        data.sellingPrice
-        }?text=${encodeURIComponent(message)}`;
-    
-    // Check if the webview is running in an app
-    if (typeof Android !== 'undefined' && Android !== null) {
-        // Call Android function to open WhatsApp
-        Android.openWhatsApp(whatsappUrl);
-    } else {
-        // If not running in an app, open the link in a new window
-        window.open(whatsappUrl, "_blank");
-    }
+  const whatsappUrl = `https://wa.me/${
+      data.sellingPrice
+      }?text=${encodeURIComponent(message)}`;
+  
+  // Call Android function to open WhatsApp
+  Android.openWhatsApp(whatsappUrl);
 };
 
 
