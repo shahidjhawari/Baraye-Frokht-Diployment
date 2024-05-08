@@ -99,20 +99,29 @@ const ProductDetails = () => {
   const handleWhatsAppMessage = () => {
     let message = `Aslamo Alaikum!! I am `;
     if (user && user.name) {
-      message += `${user.name}`;
+        message += `${user.name}`;
     }
     message += ` from Baraye Frokht App. Ap ye ${
-      data?.productName
-    } - ${displayINRCurrency(data.price).replace(
-      /\.00$/,
-      ""
-    )} me sell kar rahe han, me buy krna chahta hoon`;
+        data?.productName
+        } - ${displayINRCurrency(data.price).replace(
+            /\.00$/,
+            ""
+        )} me sell kar rahe han, me buy krna chahta hoon`;
 
     const whatsappUrl = `https://wa.me/${
-      data.sellingPrice
-    }?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, "_parent");
-  };
+        data.sellingPrice
+        }?text=${encodeURIComponent(message)}`;
+    
+    // Check if the webview is running in an app
+    if (typeof Android !== 'undefined' && Android !== null) {
+        // Call Android function to open WhatsApp
+        Android.openWhatsApp(whatsappUrl);
+    } else {
+        // If not running in an app, open the link in a new window
+        window.open(whatsappUrl, "_blank");
+    }
+};
+
 
   return (
     <div className="container mx-auto p-4">
