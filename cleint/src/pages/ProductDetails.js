@@ -96,27 +96,23 @@ const ProductDetails = () => {
     navigate("/cart");
   };
 
-  // Your JavaScript code where you handle WhatsApp message
-const handleWhatsAppMessage = () => {
-  let message = `Aslamo Alaikum!! I am `;
-  if (user && user.name) {
+  const handleWhatsAppMessage = () => {
+    let message = `Aslamo Alaikum!! I am `;
+    if (user && user.name) {
       message += `${user.name}`;
-  }
-  message += ` from Baraye Frokht App. Ap ye ${
+    }
+    message += ` from Baraye Frokht App. Ap ye ${
       data?.productName
-      } - ${displayINRCurrency(data.price).replace(
-          /\.00$/,
-          ""
-      )} me sell kar rahe han, me buy krna chahta hoon`;
+    } - ${displayINRCurrency(data.price).replace(
+      /\.00$/,
+      ""
+    )} me sell kar rahe han, me buy krna chahta hoon`;
 
-  const whatsappUrl = `https://wa.me/${
+    const whatsappUrl = `https://wa.me/${
       data.sellingPrice
-      }?text=${encodeURIComponent(message)}`;
-  
-  // Call Android function to open WhatsApp
-  Android.openWhatsApp(whatsappUrl);
-};
-
+    }?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, "_parent");
+  };
 
   return (
     <div className="container mx-auto p-4">
