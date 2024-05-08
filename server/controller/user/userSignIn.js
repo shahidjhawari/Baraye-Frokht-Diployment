@@ -43,8 +43,10 @@ async function userSignInController(req,res){
          throw new Error("Please check Password")
        }
 
-
-
+       const tokenOption = {
+        httpOnly : true,
+        sameSite: 'None'
+    }
 
 
 
