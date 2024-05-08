@@ -108,10 +108,23 @@ const ProductDetails = () => {
       ""
     )} me sell kar rahe han, me buy krna chahta hoon`;
 
-    const whatsappUrl = `https://wa.me/${
-      data.sellingPrice
-    }?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, "_blank");
+    const whatsappNumber = data.sellingPrice; // WhatsApp number to send the message to
+    const whatsappMessage = encodeURIComponent(message);
+
+    // Use the WhatsApp custom URL scheme to open the app
+    const whatsappUrl = `whatsapp://send?phone=${whatsappNumber}&text=${whatsappMessage}`;
+
+    // Check if the WhatsApp app is installed
+    window.location.href = whatsappUrl;
+    setTimeout(() => {
+      if (!document.hasFocus()) {
+        // If the WhatsApp app is not installed, open the web version
+        window.open(
+          `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`,
+          "_blank"
+        );
+      }
+    }, 500);
   };
 
   return (
