@@ -112,14 +112,14 @@ const ProductDetails = () => {
       data.sellingPrice
     }?text=${encodeURIComponent(message)}`;
     
-    // Check if the page is loaded within an iframe
-    const isInIFrame = window !== window.top;
-    
-    if (isInIFrame) {
-      // If it's loaded within an iframe, open WhatsApp directly
+    // Check if the environment is a web view or a browser
+    const isWebView = /Android/.test(navigator.userAgent) && !/Chrome|Firefox/.test(navigator.userAgent);
+
+    if (isWebView) {
+      // If it's a web view, open WhatsApp directly
       window.location.href = whatsappUrl;
     } else {
-      // If it's not loaded within an iframe, open in a new tab/window
+      // If it's a regular browser, open in a new tab/window
       window.open(whatsappUrl, "_blank");
     }
 };
