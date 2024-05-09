@@ -97,28 +97,16 @@ const ProductDetails = () => {
   };
 
   const handleWhatsAppMessage = () => {
-    const phoneNumber = `${data.sellingPrice}`;
-    // Construct the WhatsApp message
-    let message = `Aslamo Alaikum!! I am `;
-    if (user && user.name) {
-      message += `${user.name}`;
-    }
-    message += ` from Baraye Frokht App. Ap ye ${
-      data?.productName
-    } - ${displayINRCurrency(data.price).replace(
-      /\.00$/,
-      ""
-    )} me sell kar rahe han, me buy krna chahta hoon`;
-
-    // Include the phone number (data.phoneNumber) in the message
-    message += `. Mera phone number hai: 0${data.phoneNumber}`;
-
-    // Pass the message to the Android interface to handle it
-    window.Android.openWhatsApp(sellingPrice);
-};
-
-
-
+    const message = `Aslamo Alaikum!! I am ${
+      user.name
+    } from Baraye Frokht. Ap ye ${data?.productName} ${displayINRCurrency(
+      data.price
+    ).replace(/\.00$/, "")} me sell kar rahe han, me buy krna chahta hoon`;
+    const whatsappUrl = `https://wa.me/${
+      data.sellingPrice
+    }?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, "_blank");
+  };
 
   return (
     <div className="container mx-auto p-4">
