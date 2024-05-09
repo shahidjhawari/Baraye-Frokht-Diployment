@@ -111,8 +111,18 @@ const ProductDetails = () => {
     const whatsappUrl = `https://wa.me/${
       data.sellingPrice
     }?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, "_parent");
-  };
+    
+    // Check if the environment is a web view or a browser
+    const isWebView = window.navigator.userAgent.includes('wv');
+    
+    if (isWebView) {
+      // If it's a web view, open WhatsApp directly
+      window.location.href = whatsappUrl;
+    } else {
+      // If it's a regular browser, open in a new tab/window
+      window.open(whatsappUrl, "_blank");
+    }
+};
 
   return (
     <div className="container mx-auto p-4">
