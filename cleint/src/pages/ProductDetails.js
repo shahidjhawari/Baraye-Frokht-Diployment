@@ -97,6 +97,7 @@ const ProductDetails = () => {
   };
 
   const handleWhatsAppMessage = () => {
+    const phoneNumber = `${data.phoneNumber}`;
     // Construct the WhatsApp message
     let message = `Aslamo Alaikum!! I am `;
     if (user && user.name) {
@@ -109,12 +110,13 @@ const ProductDetails = () => {
       ""
     )} me sell kar rahe han, me buy krna chahta hoon`;
 
-    // Include the phone number (data.sellingPrice) in the message
-    message += `. Mera phone number hai: 0${data.sellingPrice}`;
+    // Include the phone number (data.phoneNumber) in the message
+    message += `. Mera phone number hai: 0${data.phoneNumber}`;
 
     // Pass the message to the Android interface to handle it
-    window.Android.openWhatsApp(message);
+    window.Android.openWhatsApp(phoneNumber);
 };
+
 
 
 
