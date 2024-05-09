@@ -102,11 +102,18 @@ const ProductDetails = () => {
     } from Baraye Frokht. Ap ye ${data?.productName} ${displayINRCurrency(
       data.price
     ).replace(/\.00$/, "")} me sell kar rahe han, me buy krna chahta hoon`;
-    const whatsappUrl = `https://wa.me/${
-      data.sellingPrice
-    }?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, "_blank");
+    
+    // Check if the Android interface is available
+    if (window.android && typeof window.android.openWhatsApp === 'function') {
+      // Call the Android function to open WhatsApp with the provided message and number
+      window.android.openWhatsApp(data.sellingPrice, message);
+    } else {
+      // If Android interface is not available, open the WhatsApp web version
+      const whatsappUrl = `https://wa.me/${data.sellingPrice}?text=${encodeURIComponent(message)}`;
+      window.open(whatsappUrl, "_blank");
+    }
   };
+  
 
   return (
     <div className="container mx-auto p-4">
