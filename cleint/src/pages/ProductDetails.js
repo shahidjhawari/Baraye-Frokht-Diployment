@@ -108,20 +108,8 @@ const ProductDetails = () => {
       ""
     )} me sell kar rahe han, me buy krna chahta hoon`;
 
-    const whatsappUrl = `https://wa.me/${
-      data.sellingPrice
-    }?text=${encodeURIComponent(message)}`;
-    
-    // Check if the environment is a web view or a browser
-    const isWebView = /Android/.test(navigator.userAgent) && !/Chrome|Firefox/.test(navigator.userAgent);
-
-    if (isWebView) {
-      // If it's a web view, open WhatsApp directly
-      window.location.href = whatsappUrl;
-    } else {
-      // If it's a regular browser, open in a new tab/window
-      window.open(whatsappUrl, "_blank");
-    }
+    // Call the openWhatsApp method of the Android interface
+    window.Android.openWhatsApp(message);
 };
 
 
