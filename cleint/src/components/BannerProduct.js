@@ -5,12 +5,12 @@ import image2 from '../assest/banner/img2.webp';
 import image3 from '../assest/banner/img3.jpg';
 import image4 from '../assest/banner/img4.jpg';
 import image5 from '../assest/banner/img5.webp';
-import image1Mobile from '../assest/banner/1.jpg';
-import image2Mobile from '../assest/banner/1.webp';
-import image3Mobile from '../assest/banner/2.webp';
-import image4Mobile from '../assest/banner/3.webp';
-import image5Mobile from '../assest/banner/4.webp';
-import banner1 from "../assest/banner1.png"
+import image2Mobile from '../assest/1.webp';
+import image3Mobile from '../assest/2.webp';
+import image4Mobile from '../assest/3.webp';
+import image5Mobile from '../assest/1.webp';
+import banner1 from "../assest/1.png"
+
 
 const BannerProduct = () => {
     const [currentImage, setCurrentImage] = useState(0);
