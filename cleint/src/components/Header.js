@@ -122,11 +122,11 @@ const Header = () => {
               //   Logout
               // </button>
               <Link
-              to={"/admin-panel/all-products"}
-              className="px-3 py-1 rounded-full text-white bg-fuchsia-600 hover:bg-amber-500"
-            >
-              Sell
-            </Link>
+                to={"/admin-panel/all-products"}
+                className="border-4 border-light-300 px-4 py-1 rounded-full text-white bg-fuchsia-600 hover:bg-amber-500"
+              >
+                <b>Sell</b>
+              </Link>
             ) : (
               <Link
                 to={"/login"}
@@ -136,7 +136,7 @@ const Header = () => {
               </Link>
             )}
           </div>
-          
+
           <div className="relative flex justify-center">
             {user?._id && (
               <div className="text-3xl cursor-pointer relative flex justify-center">
