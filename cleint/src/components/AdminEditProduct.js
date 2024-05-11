@@ -188,7 +188,7 @@ const AdminEditProduct = ({ onClose, productData, fetchdata }) => {
                       />
 
                       <div
-                        className="absolute bottom-0 right-0 p-1 text-white bg-red-600 rounded-full hidden group-hover:block cursor-pointer"
+                        className="absolute bottom-0 right-0 p-1 text-white bg-red-600 rounded-full cursor-pointer"
                         onClick={() => handleDeleteProductImage(index)}
                       >
                         <MdDelete />

@@ -115,12 +115,18 @@ const Header = () => {
         <div className="flex items-center gap-7">
           <div>
             {user?._id ? (
-              <button
-                onClick={handleLogout}
-                className="px-3 py-1 rounded-full text-white bg-fuchsia-600 hover:bg-amber-500"
-              >
-                Logout
-              </button>
+              // <button
+              //   onClick={handleLogout}
+              //   className="px-3 py-1 rounded-full text-white bg-fuchsia-600 hover:bg-amber-500"
+              // >
+              //   Logout
+              // </button>
+              <Link
+              to={"/admin-panel/all-products"}
+              className="px-3 py-1 rounded-full text-white bg-fuchsia-600 hover:bg-amber-500"
+            >
+              Sell
+            </Link>
             ) : (
               <Link
                 to={"/login"}
