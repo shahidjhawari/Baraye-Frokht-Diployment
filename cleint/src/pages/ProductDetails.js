@@ -97,23 +97,24 @@ const ProductDetails = () => {
   };
 
   const handleWhatsAppMessage = () => {
-    const message = `Aslamo Alaikum!! I am ${
-      user.name
-    } from Baraye Frokht. Ap ye ${data?.productName} ${displayINRCurrency(
-      data.price
-    ).replace(/\.00$/, "")} me sell kar rahe han, me buy krna chahta hoon`;
-    
-    // Check if the Android interface is available
-    if (window.android && typeof window.android.openWhatsApp === 'function') {
-      // Call the Android function to open WhatsApp with the provided message and number
-      window.android.openWhatsApp(data.sellingPrice, message);
-    } else {
-      // If Android interface is not available, open the WhatsApp web version
-      const whatsappUrl = `https://wa.me/${data.sellingPrice}?text=${encodeURIComponent(message)}`;
-      window.open(whatsappUrl, "_blank");
+    let message = `Aslamo Alaikum!! I am `;
+    if (user && user.name) {
+      message += `${user.name}`;
     }
+    message += ` from Baraye Frokht App. Ap ye ${
+      data?.productName
+    } - ${displayINRCurrency(data.price).replace(
+      /\.00$/,
+      ""
+    )} me sell kar rahe han, me buy krna chahta hoon`;
+
+    const whatsappUrl = `https://wa.me/${
+      data.sellingPrice
+    }?text=${encodeURIComponent(message)}`;
+
+    // Open WhatsApp URL within the WebView
+    window.location.href = whatsappUrl;
   };
-  
 
   return (
     <div className="container mx-auto p-4">
