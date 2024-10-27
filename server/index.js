@@ -6,12 +6,14 @@ const connectDB = require("./config/db");
 const router = require("./routes");
 
 const app = express();
+
 app.use(
   cors({
-    origin: "https://barayefrokht.vercel.app",
+    origin: true, // Allows access from any origin
     credentials: true,
   })
 );
+
 app.use(express.json());
 app.use(cookieParser());
 
