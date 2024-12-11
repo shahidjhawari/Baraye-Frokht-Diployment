@@ -15,57 +15,55 @@ const BannerProduct = () => {
     const [currentImage, setCurrentImage] = useState(0);
 
     const desktopImages = [image1, image2, image3, image4, image5];
-
     const mobileImages = [image1Mobile, image2Mobile, image3Mobile, image4Mobile, image5Mobile];
 
     const nextImage = () => {
-        if (desktopImages.length - 1 > currentImage) {
-            setCurrentImage(prev => prev + 1);
-        }
+        setCurrentImage((prev) => (prev + 1) % desktopImages.length);
     };
 
     const prevImage = () => {
-        if (currentImage !== 0) {
-            setCurrentImage(prev => prev - 1);
-        }
+        setCurrentImage((prev) => (prev - 1 + desktopImages.length) % desktopImages.length);
     };
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            if (desktopImages.length - 1 > currentImage) {
-                nextImage();
-            } else {
-                setCurrentImage(0);
-            }
-        }, 5000);
-
+        const interval = setInterval(nextImage, 5000);
         return () => clearInterval(interval);
-    }, [currentImage]);
+    }, []);
 
     return (
-        <div className='container mx-auto px-4 rounded'>
-            <div className='h-56 md:h-72 w-full bg-slate-200 relative rounded-2xl'>
-                <div className='absolute z-10 h-full w-full md:flex items-center hidden'>
-                    <div className='flex justify-between w-full text-2xl'>
-                        <button onClick={prevImage} className='bg-white shadow-md rounded-full p-1'><FaAngleLeft /></button>
-                        <button onClick={nextImage} className='bg-white shadow-md rounded-full p-1'><FaAngleRight /></button>
+        <div className="container mx-auto px-4 rounded">
+            <div className="h-56 md:h-72 w-full bg-slate-200 relative rounded-2xl">
+                <div className="absolute z-10 h-full w-full md:flex items-center hidden">
+                    <div className="flex justify-between w-full text-2xl">
+                        <button onClick={prevImage} className="bg-white shadow-md rounded-full p-1"><FaAngleLeft /></button>
+                        <button onClick={nextImage} className="bg-white shadow-md rounded-full p-1"><FaAngleRight /></button>
                     </div>
                 </div>
                 {/* Desktop and tablet version */}
-                <div className='hidden md:flex h-full w-full overflow-hidden rounded-2xl'>
-                    {desktopImages.map((imageUrl, index) => (
-                        <div className='w-full h-full min-w-full min-h-full transition-all' key={index}>
-                            <img src={imageUrl} className='w-full h-full' alt={`Banner ${index}`} />
-                        </div>
-                    ))}
+                <div className="hidden md:flex h-full w-full overflow-hidden rounded-2xl">
+                    <div
+                        className="flex transition-transform duration-500"
+                        style={{ transform: `translateX(-${currentImage * 100}%)` }}
+                    >
+                        {desktopImages.map((imageUrl, index) => (
+                            <div className="w-full h-full min-w-full min-h-full" key={index}>
+                                <img src={imageUrl} className="w-full h-full object-cover" alt={`Banner ${index}`} />
+                            </div>
+                        ))}
+                    </div>
                 </div>
                 {/* Mobile version */}
-                <div className='flex h-full w-full overflow-hidden md:hidden rounded-2xl'>
-                    {mobileImages.map((imageUrl, index) => (
-                        <div className='w-full h-full min-w-full min-h-full transition-all' key={index}>
-                            <img src={imageUrl} className='w-full h-full object-cover' alt={`Banner Mobile ${index}`} />
-                        </div>
-                    ))}
+                <div className="flex md:hidden h-full w-full overflow-hidden rounded-2xl">
+                    <div
+                        className="flex transition-transform duration-500"
+                        style={{ transform: `translateX(-${currentImage * 100}%)` }}
+                    >
+                        {mobileImages.map((imageUrl, index) => (
+                            <div className="w-full h-full min-w-full min-h-full" key={index}>
+                                <img src={imageUrl} className="w-full h-full object-cover" alt={`Banner Mobile ${index}`} />
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>
