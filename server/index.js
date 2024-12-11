@@ -9,7 +9,8 @@ const app = express();
 
 app.use(
   cors({
-    origin: true, // Allows access from any origin
+    origin: "https://barayefrokht.vercel.app",
+    credentials: true,
   })
 );
 
