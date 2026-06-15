@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState, useCallback } from "react";
 import fetchCategoryWiseProduct from "../helpers/fetchCategoryWiseProduct";
 import displayINRCurrency from "../helpers/displayCurrency";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
@@ -9,11 +9,10 @@ import { calculateTimePassed } from "./Time";
 import "./VerticalCardProduct.css";
 
 const HorizontalCardProduct = ({ category, heading }) => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState([]);  // ✅ empty array default
   const [loading, setLoading] = useState(true);
   const loadingList = new Array(13).fill(null);
 
-  const [scroll, setScroll] = useState(0);
   const scrollElement = useRef();
 
   const { fetchUserAddToCart } = useContext(Context);
@@ -23,17 +22,16 @@ const HorizontalCardProduct = ({ category, heading }) => {
     fetchUserAddToCart();
   };
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {  // ✅ useCallback mein wrap kiya
     setLoading(true);
     const categoryProduct = await fetchCategoryWiseProduct(category);
     setLoading(false);
-
-    setData(categoryProduct?.data);
-  };
+    setData(categoryProduct?.data || []);  // ✅ undefined aye to empty array use karo
+  }, [category]);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);  // ✅ dependency add ki
 
   const scrollRight = () => {
     scrollElement.current.scrollLeft += 300;
@@ -42,10 +40,10 @@ const HorizontalCardProduct = ({ category, heading }) => {
     scrollElement.current.scrollLeft -= 300;
   };
 
-  // Sort data by createdAt before rendering
-  const sortedData = [...data].sort(
+  // ✅ data array hai to hi sort karo
+  const sortedData = Array.isArray(data) ? [...data].sort(
     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-  );
+  ) : [];
 
   return (
     <div className="container mx-auto px-4 my-6 relative">
@@ -69,62 +67,54 @@ const HorizontalCardProduct = ({ category, heading }) => {
         </button>
 
         {loading
-          ? loadingList.map((product, index) => {
-              return (
-                <div
-                  key={index}
-                  className="w-full min-w-[280px] md:min-w-[320px] max-w-[280px] md:max-w-[320px] h-36 bg-white rounded-sm shadow flex"
-                >
-                  <div className="bg-slate-200 h-full p-4 min-w-[120px] md:min-w-[145px] animate-pulse"></div>
-                  <div className="p-4 grid w-full gap-2">
-                    <h2 className="font-medium text-base md:text-lg text-ellipsis line-clamp-1 text-black bg-slate-200 animate-pulse p-1 rounded-full"></h2>
-                    <p className="capitalize text-slate-500 p-1 bg-slate-200 animate-pulse rounded-full"></p>
-                    <div className="flex gap-3 w-full">
-                      <p className="text-red-600 font-medium p-1 bg-slate-200 w-full animate-pulse rounded-full"></p>
-                      <p className="text-slate-500 line-through p-1 bg-slate-200 w-full animate-pulse rounded-full"></p>
-                    </div>
-                    <button className="text-sm  text-white px-3 py-0.5 rounded-full w-full bg-slate-200 animate-pulse"></button>
-                  </div>
+          ? loadingList.map((product, index) => (
+            <div
+              key={index}
+              className="w-full min-w-[280px] md:min-w-[320px] max-w-[280px] md:max-w-[320px] h-36 bg-white rounded-sm shadow flex"
+            >
+              <div className="bg-slate-200 h-full p-4 min-w-[120px] md:min-w-[145px] animate-pulse"></div>
+              <div className="p-4 grid w-full gap-2">
+                <h2 className="font-medium text-base md:text-lg text-ellipsis line-clamp-1 text-black bg-slate-200 animate-pulse p-1 rounded-full"></h2>
+                <p className="capitalize text-slate-500 p-1 bg-slate-200 animate-pulse rounded-full"></p>
+                <div className="flex gap-3 w-full">
+                  <p className="text-red-600 font-medium p-1 bg-slate-200 w-full animate-pulse rounded-full"></p>
+                  <p className="text-slate-500 line-through p-1 bg-slate-200 w-full animate-pulse rounded-full"></p>
                 </div>
-              );
-            })
-          : sortedData.map((product, index) => {
-              return (
-                <Link
-                  key={product._id}
-                  to={"product/" + product?._id}
-                  className="w-full min-w-[280px] md:min-w-[320px] max-w-[280px] md:max-w-[320px] h-36 bg-white rounded-sm shadow flex"
-                >
-                  <div className="bg-slate-200 h-full p-4 min-w-[120px] md:min-w-[145px]">
-                    <img
-                      src={product.productImage[0]}
-                      className="object-scale-down h-full hover:scale-110 transition-all"
-                    />
-                  </div>
-                  <div className="p-4 grid">
-                    <h2 className="font-medium text-base md:text-lg text-ellipsis line-clamp-1 text-black">
-                      {product?.productName.length > 12
-                        ? product.productName.substring(0, 12) + "..."
-                        : product?.productName}
-                    </h2>
-                    <p className="capitalize text-slate-500">
-                      {product?.category}
-                    </p>
-                    <div className="flex gap-3">
-                      <p className="text-fuchsia-600 font-medium">
-                        {displayINRCurrency(product?.price.toFixed(0)).replace(
-                          /\.00$/,
-                          ""
-                        )}
-                      </p>
-                    </div>
-                    <p className="text-gray-500 text-sm flex items-center">
-                      {calculateTimePassed(product?.createdAt)}
-                    </p>
-                  </div>
-                </Link>
-              );
-            })}
+                <button className="text-sm text-white px-3 py-0.5 rounded-full w-full bg-slate-200 animate-pulse"></button>
+              </div>
+            </div>
+          ))
+          : sortedData.map((product) => (
+            <Link
+              key={product._id}
+              to={"product/" + product?._id}
+              className="w-full min-w-[280px] md:min-w-[320px] max-w-[280px] md:max-w-[320px] h-36 bg-white rounded-sm shadow flex"
+            >
+              <div className="bg-slate-200 h-full p-4 min-w-[120px] md:min-w-[145px]">
+                <img
+                  src={product.productImage[0]}
+                  alt={product.productName}
+                  className="object-scale-down h-full hover:scale-110 transition-all"
+                />
+              </div>
+              <div className="p-4 grid">
+                <h2 className="font-medium text-base md:text-lg text-ellipsis line-clamp-1 text-black">
+                  {product?.productName.length > 12
+                    ? product.productName.substring(0, 12) + "..."
+                    : product?.productName}
+                </h2>
+                <p className="capitalize text-slate-500">{product?.category}</p>
+                <div className="flex gap-3">
+                  <p className="text-fuchsia-600 font-medium">
+                    {displayINRCurrency(product?.price.toFixed(0)).replace(/\.00$/, "")}
+                  </p>
+                </div>
+                <p className="text-gray-500 text-sm flex items-center">
+                  {calculateTimePassed(product?.createdAt)}
+                </p>
+              </div>
+            </Link>
+          ))}
       </div>
     </div>
   );

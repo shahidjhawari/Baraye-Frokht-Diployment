@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken')
 
+const SECRET_KEY = "baraye-frokht-secret-key-2024"  // ✅ hardcode kar diya
+
 async function authToken(req,res,next){
     try{
         const token = req.cookies?.token
@@ -13,7 +15,7 @@ async function authToken(req,res,next){
             })
         }
 
-        jwt.verify(token, process.env.TOKEN_SECRET_KEY, function(err, decoded) {
+        jwt.verify(token, SECRET_KEY, function(err, decoded) {  // ✅ SECRET_KEY use kiya
             console.log(err)
             console.log("decoded",decoded)
             
@@ -26,7 +28,6 @@ async function authToken(req,res,next){
             next()
         });
 
-
     }catch(err){
         res.status(400).json({
             message : err.message || err,
@@ -36,6 +37,5 @@ async function authToken(req,res,next){
         })
     }
 }
-
 
 module.exports = authToken
