@@ -1,4 +1,4 @@
-const backendDomin = "https://baraye-frokht-diployment-server.vercel.app"  // ✅ localhost set kar diya
+const backendDomin = "http://localhost:8080"  // ✅ localhost set kar diya
 
 const SummaryApi = {
     signUP : {
