@@ -28,7 +28,7 @@ app.use("/api", router);
 const PORT = 8080;
 
 connectDB().then((conn) => {
-  if(conn){  // ✅ sirf tab server start ho jab DB connect ho
+  if(conn){  // ✅ sirf tab server start ho jab DB connect hosa
     app.listen(PORT, () => {
       console.log("Server is running on port " + PORT);
     });
