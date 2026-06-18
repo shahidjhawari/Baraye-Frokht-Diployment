@@ -20,56 +20,69 @@ const UploadProduct = ({ onClose, fetchData }) => {
   });
   const [openFullScreenImage, setOpenFullScreenImage] = useState(false);
   const [fullScreenImage, setFullScreenImage] = useState("");
+  const [imageUploading, setImageUploading] = useState(false); // ✅ Loader
+  const [uploadProgress, setUploadProgress] = useState(0);     // ✅ Progress
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-
-    setData((preve) => {
-      return {
-        ...preve,
-        [name]: value,
-      };
-    });
+    setData((preve) => ({ ...preve, [name]: value }));
   };
 
   const handleUploadProduct = async (e) => {
     const file = e.target.files[0];
-    const uploadImageCloudinary = await uploadImage(file);
+    if (!file) return;
 
-    setData((preve) => {
-      return {
+    // ✅ 5MB size check
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("❌ Image 5MB se bari hai! Choti image upload karein.");
+      return;
+    }
+
+    setImageUploading(true);
+    setUploadProgress(0);
+
+    // ✅ Progress animation
+    const progressInterval = setInterval(() => {
+      setUploadProgress((prev) => {
+        if (prev >= 90) { clearInterval(progressInterval); return 90; }
+        return prev + 10;
+      });
+    }, 200);
+
+    try {
+      const uploadImageCloudinary = await uploadImage(file);
+      clearInterval(progressInterval);
+      setUploadProgress(100);
+
+      setData((preve) => ({
         ...preve,
         productImage: [...preve.productImage, uploadImageCloudinary.url],
-      };
-    });
+      }));
+
+      toast.success("✅ Image upload ho gayi!");
+    } catch (err) {
+      toast.error("❌ Upload fail hui, dobara try karein");
+    } finally {
+      setTimeout(() => {
+        setImageUploading(false);
+        setUploadProgress(0);
+      }, 600);
+    }
   };
 
   const handleDeleteProductImage = async (index) => {
-    console.log("image index", index);
-
     const newProductImage = [...data.productImage];
     newProductImage.splice(index, 1);
-
-    setData((preve) => {
-      return {
-        ...preve,
-        productImage: [...newProductImage],
-      };
-    });
+    setData((preve) => ({ ...preve, productImage: [...newProductImage] }));
   };
 
-  {
-    /**upload product */
-  }
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const response = await fetch(SummaryApi.uploadProduct.url, {
       method: SummaryApi.uploadProduct.method,
       credentials: "include",
-      headers: {
-        "content-type": "application/json",
-      },
+      headers: { "content-type": "application/json" },
       body: JSON.stringify(data),
     });
 
@@ -87,7 +100,7 @@ const UploadProduct = ({ onClose, fetchData }) => {
   };
 
   return (
-    <div className="fixed w-full  h-full bg-slate-200 bg-opacity-35 top-0 left-0 right-0 bottom-0 flex justify-center items-center">
+    <div className="fixed w-full h-full bg-slate-200 bg-opacity-35 top-0 left-0 right-0 bottom-0 flex justify-center items-center z-50">
       <div className="bg-white p-4 rounded w-full max-w-2xl h-full max-h-[80%] overflow-hidden">
         <div className="flex justify-between items-center pb-3">
           <h2 className="font-bold text-lg">Upload Product</h2>
@@ -115,9 +128,7 @@ const UploadProduct = ({ onClose, fetchData }) => {
             required
           />
 
-          <label htmlFor="category" className="mt-3">
-            Category :
-          </label>
+          <label htmlFor="category" className="mt-3">Category :</label>
           <select
             required
             value={data.category}
@@ -126,72 +137,85 @@ const UploadProduct = ({ onClose, fetchData }) => {
             className="p-2 bg-slate-100 border rounded"
           >
             <option value={""}>Select Category</option>
-            {productCategory.map((el, index) => {
-              return (
-                <option value={el.value} key={el.value + index}>
-                  {el.label}
-                </option>
-              );
-            })}
+            {productCategory.map((el, index) => (
+              <option value={el.value} key={el.value + index}>{el.label}</option>
+            ))}
           </select>
 
           <label htmlFor="productImage" className="mt-3">
-            Product Image :
+            Product Image : <span className="text-xs text-slate-400">(Max 5MB)</span>
           </label>
+
           <label htmlFor="uploadImageInput">
-            <div className="p-2 bg-slate-100 border rounded h-32 w-full flex justify-center items-center cursor-pointer">
-              <div className="text-slate-500 flex justify-center items-center flex-col gap-2">
-                <span className="text-4xl">
-                  <FaCloudUploadAlt />
-                </span>
-                <p className="text-sm">Upload Product Image</p>
-                <input
-                  type="file"
-                  id="uploadImageInput"
-                  className="hidden"
-                  onChange={handleUploadProduct}
-                />
-              </div>
+            <div className="p-2 bg-slate-100 border rounded h-32 w-full flex justify-center items-center cursor-pointer overflow-hidden">
+
+              {/* ✅ Loader — jab image upload ho rahi ho */}
+              {imageUploading ? (
+                <div className="flex flex-col items-center gap-2 w-full px-6">
+                  {/* Spinning circle */}
+                  <div className="w-10 h-10 border-4 border-fuchsia-600 border-t-transparent rounded-full animate-spin"></div>
+                  <p className="text-sm text-slate-600 font-medium">
+                    Uploading... {uploadProgress}%
+                  </p>
+                  {/* Progress bar */}
+                  <div className="w-full bg-slate-200 rounded-full h-2.5">
+                    <div
+                      className="bg-fuchsia-600 h-2.5 rounded-full transition-all duration-300"
+                      style={{ width: `${uploadProgress}%` }}
+                    ></div>
+                  </div>
+                </div>
+              ) : (
+                /* Normal upload icon */
+                <div className="text-slate-500 flex justify-center items-center flex-col gap-2">
+                  <span className="text-4xl"><FaCloudUploadAlt /></span>
+                  <p className="text-sm">Upload Product Image</p>
+                </div>
+              )}
+
+              <input
+                type="file"
+                id="uploadImageInput"
+                className="hidden"
+                accept="image/*"
+                onChange={handleUploadProduct}
+                disabled={imageUploading}
+              />
             </div>
           </label>
+
           <div>
             {data?.productImage[0] ? (
-              <div className="flex items-center gap-2">
-                {data.productImage.map((el, index) => {
-                  return (
-                    <div className="relative group">
-                      <img
-                        src={el}
-                        alt={el}
-                        width={80}
-                        height={80}
-                        className="bg-slate-100 border cursor-pointer"
-                        onClick={() => {
-                          setOpenFullScreenImage(true);
-                          setFullScreenImage(el);
-                        }}
-                      />
-
-                      <div
-                        className="absolute bottom-0 right-0 p-1 text-white bg-red-600 rounded-full group-hover:block cursor-pointer"
-                        onClick={() => handleDeleteProductImage(index)}
-                      >
-                        <MdDelete />
-                      </div>
+              <div className="flex items-center gap-2 flex-wrap">
+                {data.productImage.map((el, index) => (
+                  <div className="relative group" key={index}>
+                    <img
+                      src={el}
+                      alt={el}
+                      width={80}
+                      height={80}
+                      loading="lazy"
+                      className="bg-slate-100 border cursor-pointer object-cover"
+                      onClick={() => {
+                        setOpenFullScreenImage(true);
+                        setFullScreenImage(el);
+                      }}
+                    />
+                    <div
+                      className="absolute bottom-0 right-0 p-1 text-white bg-red-600 rounded-full hidden group-hover:block cursor-pointer"
+                      onClick={() => handleDeleteProductImage(index)}
+                    >
+                      <MdDelete />
                     </div>
-                  );
-                })}
+                  </div>
+                ))}
               </div>
             ) : (
-              <p className="text-red-600 text-xs">
-                *Please upload product image
-              </p>
+              <p className="text-red-600 text-xs">*Please upload product image</p>
             )}
           </div>
 
-          <label htmlFor="price" className="mt-3">
-            Selling Price :
-          </label>
+          <label htmlFor="price" className="mt-3">Selling Price :</label>
           <input
             type="number"
             id="price"
@@ -203,9 +227,7 @@ const UploadProduct = ({ onClose, fetchData }) => {
             required
           />
 
-          <label htmlFor="sellingPrice" className="mt-3">
-            Contact or Watsapp Number :
-          </label>
+          <label htmlFor="sellingPrice" className="mt-3">Contact or WhatsApp Number :</label>
           <input
             type="number"
             id="sellingPrice"
@@ -217,9 +239,7 @@ const UploadProduct = ({ onClose, fetchData }) => {
             required
           />
 
-          <label htmlFor="brandName" className="mt-3">
-            Address :
-          </label>
+          <label htmlFor="brandName" className="mt-3">Address :</label>
           <input
             type="text"
             id="brandName"
@@ -233,9 +253,7 @@ const UploadProduct = ({ onClose, fetchData }) => {
             required
           />
 
-          <label htmlFor="description" className="mt-3">
-            Description :
-          </label>
+          <label htmlFor="description" className="mt-3">Description :</label>
           <textarea
             className="h-28 bg-slate-100 border resize-none p-1"
             placeholder="Description should not exceed 1000 characters"
@@ -247,13 +265,16 @@ const UploadProduct = ({ onClose, fetchData }) => {
             required
           ></textarea>
 
-          <button className="px-3 py-2 bg-fuchsia-600 text-white mb-10 hover:bg-amber-500">
-            Upload Product
+          {/* ✅ Button disable during upload */}
+          <button
+            className="px-3 py-2 bg-fuchsia-600 text-white mb-10 hover:bg-amber-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={imageUploading}
+          >
+            {imageUploading ? "Image upload ho rahi hai..." : "Upload Product"}
           </button>
         </form>
       </div>
 
-      {/***display image full screen */}
       {openFullScreenImage && (
         <DisplayImage
           onClose={() => setOpenFullScreenImage(false)}
